@@ -21,7 +21,7 @@ function App() {
       <h1>My Todos</h1>
       <TodoForm onAddTodo={addTodo} />
       
-      <TodoList></TodoList>
+      <TodoList todoList={todoList}></TodoList>
     </div>
   )
 }
