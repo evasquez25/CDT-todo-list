@@ -3,12 +3,13 @@ import TodoList from './features/TodoList/TodoList'
 import TodoForm from './features/TodoForm'
 import { useState, useEffect } from 'react'
 
+const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`
+const token = `Bearer ${import.meta.env.VITE_PAT}`
+
 function App() {
   const [ todoList, setTodoList ] = useState([])
   const [ isLoading, setIsLoading ] = useState(false)
   const [ errorMessage, setErrorMessage ] = useState('')
-  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`
-  const token = `Bearer ${import.meta.env.VITE_PAT}`
 
   function addTodo(title) {
     const newTodo = {
@@ -64,7 +65,7 @@ function App() {
           const todo = {
             // Assign record properties from json to the appropriate todo properties
             id: record.id,
-            ...record.fileds
+            ...record.fields
           }
           if (!todo.isCompleted) {
             // Airtable doesn't return properties whose values are false or empty strings
@@ -73,9 +74,9 @@ function App() {
           }
           return todo
         })
-        setTodoList([...fetchedTodos])  // Update todos
-      } catch(error) {
-        setErrorMessage(error.message)
+        setTodoList(fetchedTodos)  // Update todos
+      } catch(err) {
+        setErrorMessage(err.message)
       } finally {
         setIsLoading(false)
       }
