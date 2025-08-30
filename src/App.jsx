@@ -96,6 +96,16 @@ function App() {
         isLoading={isLoading}
       >
       </TodoList>
+
+      {errorMessage ? (
+        <div>
+          <hr/>
+          <p>{errorMessage}</p>
+          <button type="button" onClick={() => setErrorMessage('')}>Dismiss</button>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   )
 }
