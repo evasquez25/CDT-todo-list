@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 function App() {
   const [ todoList, setTodoList ] = useState([])
   const [ isLoading, setIsLoading ] = useState(false)
+  const [ errorMessage, setErrorMessage ] = useState('')
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`
   const token = `Bearer ${import.meta.env.VITE_PAT}`
 
@@ -44,7 +45,6 @@ function App() {
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true)
-
       const options = {
         method: "GET",
         headers: {
@@ -73,11 +73,11 @@ function App() {
           }
           return todo
         })
-        setTodoList([...fetchedTodos])
+        setTodoList([...fetchedTodos])  // Update todos
       } catch(error) {
-        //TODO
+        setErrorMessage(error.message)
       } finally {
-        //TODO
+        setIsLoading(false)
       }
     }
     fetchTodos()
@@ -88,7 +88,13 @@ function App() {
       <h1>My Todos</h1>
       <TodoForm onAddTodo={addTodo} />
       
-      <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo}></TodoList>
+      <TodoList 
+        todoList={todoList} 
+        onCompleteTodo={completeTodo} 
+        onUpdateTodo={updateTodo}
+        isLoading={isLoading}
+      >
+      </TodoList>
     </div>
   )
 }
