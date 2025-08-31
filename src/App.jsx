@@ -71,15 +71,53 @@ function App() {
     setTodoList(updatedTodos)
   }
 
-  function updateTodo(editedTodo) {
-    const updatedTodos = todoList.map((todo) => {
-      if (todo.id === editedTodo.id) {
-        return {...editedTodo}
-      }
-      return todo
-    })
-
+  const updateTodo = async (currentTodo) => {
+    // Optimistically update state before updating Airtable
+    const updatedTodos = todoList.map((todo) => 
+      todo.id === currentTodo.id ? currentTodo : todo
+    )
     setTodoList(updatedTodos)
+
+    // Setup to update Airtable
+    const originalTodo = todoList.find((todo) => todo.id === currentTodo.id)
+    const payload = {
+      records: [
+        {
+          id: currentTodo.id,
+          fields: {
+            title: currentTodo.title,
+            isCompleted: currentTodo.isCompleted
+          }
+        }
+      ]
+    }
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify(payload)
+    }
+
+    try {
+      // Update record in Airtable
+      setIsSaving(true)
+      const resp = await fetch(url, options)
+      if (!resp.ok) {
+        throw new Error(resp.message)
+      }
+    } catch(err) {
+      // Revert to old record if there's an error
+      console.log(err.message)
+      setErrorMessage(`${err.message}. Reverting todo...`)
+      const revertedTodos = todoList.map((todo) =>
+        todo.id === currentTodo.id ? originalTodo : todo
+      )
+      setTodoList(revertedTodos)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   useEffect(() => {
