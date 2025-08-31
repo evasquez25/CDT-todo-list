@@ -12,6 +12,18 @@ function App() {
     const [ errorMessage, setErrorMessage ] = useState('')
     const [ isSaving, setIsSaving ] = useState(false)
 
+    function handleOptions(method, payload) {
+        const options = {
+            method: method,
+            headers: {
+                Authorization: token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
+        return options
+    }
+
     const addTodo = async (newTodo) => {
         // Build payload shaped like Airtable's API expects
         const payload = {
@@ -24,15 +36,7 @@ function App() {
             }
         ]
         }
-
-        const options = {
-            method: 'POST',
-            headers: {
-                Authorization: token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        }
+        const options = handleOptions('POST', payload)
 
         try {
             setIsSaving(true)
@@ -79,14 +83,7 @@ function App() {
                 }
             ]
         }
-        const options = {
-            method: 'PATCH',
-            headers: {
-                Authorization: token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        }
+        const options = handleOptions('PATCH', payload)
 
         try {
             // Update Airtable with completed todo
@@ -128,14 +125,7 @@ function App() {
                 }
             ]
         }
-        const options = {
-        method: 'PATCH',
-        headers: {
-            Authorization: token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-        }
+        const options = handleOptions('PATCH', payload)
 
         try {
             // Update record in Airtable
@@ -163,8 +153,8 @@ function App() {
         const options = {
             method: 'GET',
             headers: {
-            Authorization: token,
-            'Content-Type': 'application/json'
+                Authorization: token,
+                'Content-Type': 'application/json'
             }
         }
 
