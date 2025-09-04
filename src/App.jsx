@@ -6,23 +6,25 @@ import { useState, useEffect } from 'react'
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`
 const token = `Bearer ${import.meta.env.VITE_PAT}`
 
+function handleOptions(method, payload) {
+    const options = {
+        method: method,
+        headers: {
+            Authorization: token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    }
+    return options
+}
+
 function App() {
     const [ todoList, setTodoList ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorMessage, setErrorMessage ] = useState('')
     const [ isSaving, setIsSaving ] = useState(false)
-
-    function handleOptions(method, payload) {
-        const options = {
-            method: method,
-            headers: {
-                Authorization: token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        }
-        return options
-    }
+    const [ sortField, setSortField ] = useState('createdTime')
+    const [ sortDirection, setSortDirection ] = useState('desc')
 
     const addTodo = async (newTodo) => {
         // Build payload shaped like Airtable's API expects
