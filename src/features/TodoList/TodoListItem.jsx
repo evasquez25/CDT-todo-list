@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TextInputWithLabel from "../../shared/TextInputWithLabel"
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
@@ -25,6 +25,11 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
         setIsEditing(false)
     }
 
+    useEffect(() => {
+        // Cover edge case where an outdated value is displayed when a user saves a todo and clicks it again immediately.
+        setWorkingTitle(todo.title)
+    }, [todo])
+
     return (
         <ul>
             <li>
@@ -42,7 +47,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
                                 type='checkbox' 
                                 id={`checkbox${todo.id}`}
                                 checked={todo.isCompleted} 
-                                onChange={() => onCompleteTodo(todo.id)}
+                                onChange={() => onCompleteTodo(todo)}
                                 />
                             </label>
                             <span onClick={() => setIsEditing(true)}>{todo.title}</span>
