@@ -18,6 +18,11 @@ function handleOptions(method, payload) {
     return options
 }
 
+const encodeUrl = ({ sortField, sortDirection }) => {
+    let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`
+    return encodeURI(`${url}?${sortQuery}`)
+}
+
 function App() {
     const [ todoList, setTodoList ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false)
@@ -42,7 +47,7 @@ function App() {
 
         try {
             setIsSaving(true)
-            const resp = await fetch(url, options)  // Add todo to AirTable first
+            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)  // Add todo to AirTable first
             if (!resp.ok) {
                 throw new Error(resp.message)
             }
@@ -90,7 +95,7 @@ function App() {
         try {
             // Update Airtable with completed todo
             setIsSaving(true)
-            const resp = await fetch(url, options)
+            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)
             if (!resp.ok) {
                 throw new Error(resp.message)
             }
@@ -132,7 +137,7 @@ function App() {
         try {
             // Update record in Airtable
             setIsSaving(true)
-            const resp = await fetch(url, options)
+            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)
             if (!resp.ok) {
                 throw new Error(resp.message)
             }
@@ -161,7 +166,7 @@ function App() {
         }
 
         try {
-            const resp = await fetch(url, options)
+            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)
             if (!resp.ok) {
             throw new Error(resp.message)
             }
@@ -189,7 +194,7 @@ function App() {
         }
         }
         fetchTodos()
-    }, [])
+    }, [sortDirection, sortField])
 
     return (
         <div>
