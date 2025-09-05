@@ -19,9 +19,14 @@ function handleOptions(method, payload) {
     return options
 }
 
-const encodeUrl = ({ sortField, sortDirection }) => {
+const encodeUrl = ({ sortField, sortDirection, queryString }) => {
+    let searchQuery = ''
     let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`
-    return encodeURI(`${url}?${sortQuery}`)
+
+    if (queryString) {
+        searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`
+    }
+    return encodeURI(`${url}?${sortQuery}${searchQuery}`)
 }
 
 
@@ -32,6 +37,7 @@ function App() {
     const [ isSaving, setIsSaving ] = useState(false)
     const [ sortField, setSortField ] = useState('createdTime')
     const [ sortDirection, setSortDirection ] = useState('desc')
+    const [ queryString, setQueryString ] = useState('')
 
     const addTodo = async (newTodo) => {
         // Build payload shaped like Airtable's API expects
@@ -49,7 +55,7 @@ function App() {
 
         try {
             setIsSaving(true)
-            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)  // Add todo to AirTable first
+            const resp = await fetch(encodeUrl({sortDirection, sortField, queryString}), options)  // Add todo to AirTable first
             if (!resp.ok) {
                 throw new Error(resp.message)
             }
@@ -97,7 +103,7 @@ function App() {
         try {
             // Update Airtable with completed todo
             setIsSaving(true)
-            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)
+            const resp = await fetch(encodeUrl({sortDirection, sortField, queryString}), options)
             if (!resp.ok) {
                 throw new Error(resp.message)
             }
@@ -139,7 +145,7 @@ function App() {
         try {
             // Update record in Airtable
             setIsSaving(true)
-            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)
+            const resp = await fetch(encodeUrl({sortDirection, sortField, queryString}), options)
             if (!resp.ok) {
                 throw new Error(resp.message)
             }
@@ -168,7 +174,7 @@ function App() {
         }
 
         try {
-            const resp = await fetch(encodeUrl({sortDirection: sortDirection, sortField: sortField}), options)
+            const resp = await fetch(encodeUrl({sortDirection, sortField, queryString}), options)
             if (!resp.ok) {
             throw new Error(resp.message)
             }
@@ -196,7 +202,7 @@ function App() {
         }
         }
         fetchTodos()
-    }, [sortDirection, sortField])
+    }, [sortDirection, sortField, queryString])
 
     return (
         <div>
@@ -220,6 +226,8 @@ function App() {
                 setSortDirection={setSortDirection} 
                 sortField={sortField} 
                 setSortField={setSortField}
+                queryString={queryString}
+                setQueryString={setQueryString}
             />
 
             {errorMessage ? (
