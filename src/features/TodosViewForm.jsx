@@ -1,17 +1,28 @@
-
+import { useState, useEffect } from 'react'
 
 function TodosViewForm({ sortDirection, setSortDirection, sortField, setSortField, queryString, setQueryString }) {
+    const [localQueryString, setLocalQueryString] = useState(queryString)
+
     function preventRefresh(e) {
         e.preventDefault()
     }
+
+    useEffect(() => {
+        // Wait 500ms after user stops typing before sending an API request
+        const debounce = setTimeout(() => {
+            setQueryString(localQueryString)
+        }, 500)
+
+        return () => clearTimeout(debounce) // Cancels previously scheduled API request if the effect re-runs
+    }, [localQueryString, setQueryString])
 
     return (
         <>
             <form onSubmit={preventRefresh}>
                 <div>
                     <label htmlFor='todoSearch'>Search todos</label>
-                    <input id='todoSearch' type='text' value={queryString} onChange={(e) => setQueryString(e.target.value)} />
-                    <button type='button' onClick={() => setQueryString('')}>Clear</button>
+                    <input id='todoSearch' type='text' value={localQueryString} onChange={(e) => setLocalQueryString(e.target.value)} />
+                    <button type='button' onClick={() => setLocalQueryString('')}>Clear</button>
                 </div>
                 <div>
                     <label htmlFor='todoSortBy'>Sort by</label>
