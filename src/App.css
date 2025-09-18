@@ -1,0 +1,22 @@
+h1 {
+    font-family: 'Courier New', Courier, monospace;;
+}
+
+body {
+    background-color: lightblue;
+}
+
+button {
+    background-color: darkblue;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 4px 8px;
+}
+
+input {
+    margin: 5px;
+    padding: 4px 2px;
+    border-radius: 5px;
+    border: 1px solid darkblue;
+}

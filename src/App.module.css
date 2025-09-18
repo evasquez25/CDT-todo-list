@@ -1,0 +1,11 @@
+.body {
+    display: grid;
+    place-items: center; 
+}
+
+.errorMessage {
+    border-color: red;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 3px;
+}

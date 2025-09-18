@@ -1,4 +1,9 @@
 import { useState, useEffect } from 'react'
+import styled from 'styled-components'
+
+const StyledFilter = styled.div`
+    padding: 0 0 15px 0;
+`
 
 function TodosViewForm({ sortDirection, setSortDirection, sortField, setSortField, queryString, setQueryString }) {
     const [localQueryString, setLocalQueryString] = useState(queryString)
@@ -19,12 +24,12 @@ function TodosViewForm({ sortDirection, setSortDirection, sortField, setSortFiel
     return (
         <>
             <form onSubmit={preventRefresh}>
-                <div>
+                <StyledFilter>
                     <label htmlFor='todoSearch'>Search todos</label>
                     <input id='todoSearch' type='text' value={localQueryString} onChange={(e) => setLocalQueryString(e.target.value)} />
                     <button type='button' onClick={() => setLocalQueryString('')}>Clear</button>
-                </div>
-                <div>
+                </StyledFilter>
+                <StyledFilter>
                     <label htmlFor='todoSortBy'>Sort by</label>
                     <select id='todoSortBy' onChange={(e) => setSortField(e.target.value)} value={sortField}>
                         <option value='title'>Title</option>
@@ -36,7 +41,7 @@ function TodosViewForm({ sortDirection, setSortDirection, sortField, setSortFiel
                         <option value='asc'>Ascending</option>
                         <option value='desc'>Descending</option>
                     </select>
-                </div>
+                </StyledFilter>
             </form>
         </>
     )
