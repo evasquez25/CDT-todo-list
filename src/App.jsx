@@ -121,22 +121,22 @@ function App() {
         }
     }
 
-    const updateTodo = async (currentTodo) => {
+    const updateTodo = async (editedTodo) => {
         // Optimistically update state before updating Airtable
         const updatedTodos = todoList.map((todo) =>
-        todo.id === currentTodo.id ? currentTodo : todo
+        todo.id === editedTodo.id ? editedTodo : todo
         )
         setTodoList(updatedTodos)
 
         // Setup to update Airtable
-        const originalTodo = todoList.find((todo) => todo.id === currentTodo.id)
+        const originalTodo = todoList.find((todo) => todo.id === editedTodo.id)
         const payload = {
             records: [
                 {
-                    id: currentTodo.id,
+                    id: editedTodo.id,
                     fields: {
-                        title: currentTodo.title,
-                        isCompleted: currentTodo.isCompleted
+                        title: editedTodo.title,
+                        isCompleted: editedTodo.isCompleted
                     }
                 }
             ]
@@ -155,7 +155,7 @@ function App() {
             console.log(err.message)
             setErrorMessage(`${err.message}. Reverting todo...`)
             const revertedTodos = todoList.map((todo) =>
-                todo.id === currentTodo.id ? originalTodo : todo
+                todo.id === editedTodo.id ? originalTodo : todo
             )
             setTodoList(revertedTodos)
         } finally {
@@ -183,17 +183,17 @@ function App() {
             const data = await resp.json()
 
             const fetchedTodos = data.records.map((record) => {
-            const todo = {
-                // Assign record properties from json to the appropriate todo properties
-                id: record.id,
-                ...record.fields
-            }
-            if (!todo.isCompleted) {
-                // Airtable doesn't return properties whose values are false or empty strings
-                // Set property to false so field exists and prevents logic bugs
-                todo.isCompleted = false
-            }
-            return todo
+                const todo = {
+                    // Assign record properties from json to the appropriate todo properties
+                    id: record.id,
+                    ...record.fields
+                }
+                if (!todo.isCompleted) {
+                    // Airtable doesn't return properties whose values are false or empty strings
+                    // Set property to false so field exists and prevents logic bugs
+                    todo.isCompleted = false
+                }
+                return todo
             })
             setTodoList(fetchedTodos)  // Update todos
         } catch(err) {
