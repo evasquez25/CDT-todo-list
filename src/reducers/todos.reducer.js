@@ -44,8 +44,9 @@ function todosReducer(state = initialState, action) {
         case actions.setLoadError:
             return {
                 ...state, 
-                errorMessage: action.error.message, 
-                isLoading: false
+                errorMessage: action.error?.message || action.message || 'Failed to load todos', 
+                isLoading: false,
+                isSaving: false
             };
         case actions.startRequest:
             return {
@@ -80,25 +81,22 @@ function todosReducer(state = initialState, action) {
             // fallthrough
         }
         case actions.updateTodo: {
-            const updatedTodos = state.todoList.map((todo) => {
+            const updatedTodos = state.todoList.map((todo) =>
                 todo.id === action.editedTodo.id ? action.editedTodo : todo
-            });
-
+            );
             const updatedState = {
                 ...state,
                 todoList: updatedTodos,
             }
-
             if (action.error) {
-                updatedState.errorMessage = action.error.message;
+                updatedState.errorMessage = `${action.error.message}. Reverting todo...`;
             }
-
             return updatedState;
         }
         case actions.completeTodo: {
-            const updatedTodos = state.todoList.map((todo) => {
+            const updatedTodos = state.todoList.map((todo) =>
                 todo.id === action.completedTodo.id ? {...todo, isCompleted: true} : todo
-            });
+            );
             return {
                 ...state,
                 todoList: updatedTodos
@@ -124,4 +122,4 @@ const initialState = {
     queryString: '',
 }
 
-export { initialState, actions }
+export { initialState, actions, todosReducer }
