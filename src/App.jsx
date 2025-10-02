@@ -2,8 +2,13 @@ import './App.css'
 import TodoList from './features/TodoList/TodoList'
 import TodoForm from './features/TodoForm'
 import TodosViewForm from './features/TodosViewForm'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useReducer } from 'react'
 import styles from './App.module.css'
+import {
+    reducer as todosReducer,
+    actions as todoActions,
+    initialState as initialTodosState,
+} from './reducers/todos.reducer';
 
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`
 const token = `Bearer ${import.meta.env.VITE_PAT}`
@@ -29,6 +34,8 @@ function App() {
     const [ sortField, setSortField ] = useState('createdTime')
     const [ sortDirection, setSortDirection ] = useState('desc')
     const [ queryString, setQueryString ] = useState('')
+
+    const [ todoState, dispatch ] = useReducer(todosReducer, initialTodosState)
 
     const encodeUrl = useCallback(() => {
         let searchQuery = ''
