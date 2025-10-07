@@ -2,6 +2,7 @@ import './App.css'
 import TodoList from './features/TodoList/TodoList'
 import TodoForm from './features/TodoForm'
 import TodosViewForm from './features/TodosViewForm'
+import TodosPage from './pages/TodosPage'
 import { useState, useEffect, useCallback, useReducer } from 'react'
 import styles from './App.module.css'
 import {
@@ -175,24 +176,14 @@ function App() {
     return (
         <div className={styles.body}>
             <h1>My Todos</h1>
-            <TodoForm
-                onAddTodo={addTodo}
-                isSaving={todoState.isSaving}
-            />
-
-            <TodoList
-                todoList={todoState.todoList}
-                onCompleteTodo={completeTodo}
-                onUpdateTodo={updateTodo}
-                isLoading={todoState.isLoading}
-            />
-
-            <hr/>
-
-            <TodosViewForm 
-                sortDirection={sortDirection} 
-                setSortDirection={setSortDirection} 
-                sortField={sortField} 
+            <TodosPage
+                todoState={todoState}
+                addTodo={addTodo}
+                completeTodo={completeTodo}
+                updateTodo={updateTodo}
+                sortDirection={sortDirection}
+                setSortDirection={setSortDirection}
+                sortField={sortField}
                 setSortField={setSortField}
                 queryString={queryString}
                 setQueryString={setQueryString}
