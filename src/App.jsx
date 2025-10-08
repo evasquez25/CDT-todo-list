@@ -38,8 +38,10 @@ function App() {
     const [ queryString, setQueryString ] = useState('')
     const [ title, setTitle ] = useState('')
 
+    // Reducer State
     const [ todoState, dispatch ] = useReducer(todosReducer, initialTodosState)
 
+    // React Router
     const location = useLocation()
 
     const encodeUrl = useCallback(() => {
