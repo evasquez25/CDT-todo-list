@@ -5,6 +5,8 @@ import TodoForm from './features/TodoForm'
 import TodosViewForm from './features/TodosViewForm'
 import TodosPage from './pages/TodosPage'
 import Header from './shared/Header'
+import About from './pages/About'
+import NotFound from './pages/NotFound'
 
 import { useState, useEffect, useCallback, useReducer } from 'react'
 import {
@@ -212,9 +214,9 @@ function App() {
                     }
                 />
 
-                <Route path='/about' element={<h1>About</h1>} />
+                <Route path='/about' element={<About />} />
 
-                <Route path='*' element={<h1>404 Not Found</h1>} />
+                <Route path='*' element={<NotFound />} />
             </Routes>
 
             {todoState.errorMessage ? (
