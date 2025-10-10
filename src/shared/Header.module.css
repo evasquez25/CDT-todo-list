@@ -1,0 +1,39 @@
+.active {
+    color: gray;
+}
+
+.inactive {
+    color: black;
+}
+
+header {
+    position: relative;
+    width: 90%;
+    text-align: center;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: rgb(114, 170, 255);
+    border-radius: 1rem;
+}
+
+h1 {
+    margin: 2rem;
+}
+
+nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 4rem;
+    display: flex;
+    gap: 2rem;
+}
+    
+nav a {
+    text-decoration: none;
+    background-color: rgb(255, 251, 165);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+    
